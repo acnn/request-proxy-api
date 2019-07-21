@@ -26,7 +26,9 @@ class ProxyController < ApplicationController
         rescue ActiveRecord::RecordInvalid => e
             unprocessable_entity_response(e)
         end
-    end
+        rescue HTTP::TimeoutError => e
+            request_timeout_response(e)
+        end
 
     def request_params
         params.permit(:client_id, :url, :headers, :http_method, :request_body)
