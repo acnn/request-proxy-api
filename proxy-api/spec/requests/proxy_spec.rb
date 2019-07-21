@@ -35,8 +35,9 @@ RSpec.describe 'Proxy API', type: :request do
     end
 
     describe 'POST /proxy' do
-        # valid payload
+        
         let(:valid_attributes) { { client_id: 'xyz', url: 'https://www.google.com/', headers: '', http_method: 'GET', request_body: '' } }
+        let(:invalid_attributes) { { client_id: 'xyz', url: '', headers: '', http_method: 'GET', request_body: '' } }
     
         context 'when the request is valid' do
           before { post '/proxy', params: valid_attributes }
@@ -44,7 +45,15 @@ RSpec.describe 'Proxy API', type: :request do
           it 'returns status code 200 OK' do
             expect(response).to have_http_status(200)
           end
-        end 
+        end
+        
+        context 'when the request is invalid' do
+            before { post '/proxy', params: invalid_attributes }
+      
+            it 'returns status code 422 unprocessable entity' do
+              expect(response).to have_http_status(422)
+            end
+          end
 
       end
 
