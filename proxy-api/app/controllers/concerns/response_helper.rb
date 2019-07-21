@@ -1,4 +1,4 @@
-module Response
+module ResponseHelper
     DEFAULT_MESSAGES = {
         'METHOD_NOT_ALLOWED' => 'The API does not support the requested HTTP method',
         'ALLOWED_METHODS' => 'POST',

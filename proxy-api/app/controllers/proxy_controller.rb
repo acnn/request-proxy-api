@@ -1,5 +1,6 @@
-require 'http'
 class ProxyController < ApplicationController
+    include RequestHelper
+    include ResponseHelper
 
     def index
         method_not_allowed_response()
@@ -20,7 +21,7 @@ class ProxyController < ApplicationController
     def create
         begin
             user_request = UserRequest.create!(request_params)
-            source_response = HTTP.get(user_request.url)
+            source_response = make_request(user_request)
             relay_response(source_response)
         rescue ActiveRecord::RecordInvalid => e
             unprocessable_entity_response(e)
