@@ -1,5 +1,6 @@
 module ResponseHelper
     DEFAULT_MESSAGES = {
+        'WELCOME_MESSAGE' => 'Welcome to Proxy API. Please POST your request to /proxy for using the service.',
         'METHOD_NOT_ALLOWED' => 'The API does not support the requested HTTP method',
         'ALLOWED_METHODS' => 'POST',
         'TIMED_OUT' => 'The URL you are requesting did not respond in a timely fashion',
@@ -7,6 +8,12 @@ module ResponseHelper
         'RATE_LIMIT' => 'You have exceeded the allowed number of requests per minute',
         'SERVER_ERROR' => 'An unexpected error occurred'
     }
+
+    #instruct the user to post to /proxy instead of root
+    def welcome_response(errorMessage = DEFAULT_MESSAGES['WELCOME_MESSAGE'])
+        render body: errorMessage, status: :ok
+    end
+
     #405 - for any GET, PUT or DELETE requests
     def method_not_allowed_response(errorMessage = DEFAULT_MESSAGES['METHOD_NOT_ALLOWED'], allowedMethods = DEFAULT_MESSAGES['ALLOWED_METHODS'])
         response.headers['Allow'] = allowedMethods

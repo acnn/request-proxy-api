@@ -19,6 +19,10 @@ class ProxyController < ApplicationController
         method_not_allowed_response()
     end
 
+    def welcome
+        welcome_response()
+    end
+
     def create
         begin           
             user_request = UserRequest.create!(request_params)
