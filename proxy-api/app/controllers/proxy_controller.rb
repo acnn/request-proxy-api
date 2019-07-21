@@ -1,6 +1,7 @@
 class ProxyController < ApplicationController
     include RequestHelper
     include ResponseHelper
+    include RateLimiter
 
     def index
         method_not_allowed_response()
@@ -21,8 +22,12 @@ class ProxyController < ApplicationController
     def create
         begin
             user_request = UserRequest.create!(request_params)
-            source_response = make_request(user_request)
-            relay_response(source_response)
+            if(is_request_permitted(user_request))
+                source_response = make_request(user_request)
+                relay_response(source_response)
+            else
+                rate_limiter_response()
+            end
         rescue ActiveRecord::RecordInvalid => e
             unprocessable_entity_response(e)
         end
