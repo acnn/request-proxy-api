@@ -24,7 +24,7 @@ class ProxyController < ApplicationController
     end
 
     def create
-        begin           
+        begin       
             user_request = UserRequest.create!(request_params)
             if(is_request_permitted(user_request))
                 source_response = make_request(user_request)
@@ -37,7 +37,7 @@ class ProxyController < ApplicationController
         rescue HTTP::TimeoutError => e
             request_timeout_response(e)        
         rescue StandardError => e
-            #puts e
+            puts e
             server_error_response()
         end
     end
