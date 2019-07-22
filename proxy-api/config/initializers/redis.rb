@@ -1,1 +1,1 @@
-Redis.current = Redis.new(host: 'localhost', port: 6379)
+Redis.current = Redis.new(host: ENV['REDIS_DOCKER_HOST'] || 'localhost', port: 6379)
