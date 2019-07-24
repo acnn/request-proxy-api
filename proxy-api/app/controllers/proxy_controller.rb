@@ -25,7 +25,13 @@ class ProxyController < ApplicationController
 
     def create
         begin       
-            user_request = UserRequest.new(request_params)
+            user_request = UserRequest.new(
+                client_id: request_params[:client_id],
+                url: request_params[:url],
+                headers: request_params[:headers],
+                http_method: request_params[:http_method],
+                request_body: request_params[:request_body]
+            )
             if(user_request.valid?)
                 if(is_request_permitted(user_request))
                     source_response = make_request(user_request)
