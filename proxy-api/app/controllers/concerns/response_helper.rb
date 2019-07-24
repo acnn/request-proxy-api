@@ -14,30 +14,34 @@ module ResponseHelper
         render body: errorMessage, status: :ok
     end
 
+    def json_error_response(errorMessage, statusCode)
+        render json: { error: { message: errorMessage } }, status: statusCode
+    end
+
     #405 - for any GET, PUT or DELETE requests
     def method_not_allowed_response(errorMessage = DEFAULT_MESSAGES['METHOD_NOT_ALLOWED'], allowedMethods = DEFAULT_MESSAGES['ALLOWED_METHODS'])
         response.headers['Allow'] = allowedMethods
-        render json: { error: errorMessage }, status: :method_not_allowed
+        json_error_response(errorMessage, :method_not_allowed)
     end
 
     #408 - request timed out
     def request_timeout_response(errorMessage = DEFAULT_MESSAGES['TIMED_OUT'])
-        render json: { error: errorMessage }, status: :request_timeout
+        json_error_response(errorMessage, :request_timeout)
     end
 
     #422 - input is semantically incorrect
     def unprocessable_entity_response(errorMessage = DEFAULT_MESSAGES['INVALID_PARAMS'])
-        render json: { error: errorMessage }, status: :unprocessable_entity
+        json_error_response(errorMessage, :unprocessable_entity)
     end
 
     #429 - rate limiter - too many requests
     def rate_limiter_response(errorMessage = DEFAULT_MESSAGES['RATE_LIMIT'])
-        render json: { error: errorMessage }, status: 429
+        json_error_response(errorMessage, 429)
     end
 
     #500 - server error - any unhandler errors
     def server_error_response(errorMessage = DEFAULT_MESSAGES['SERVER_ERROR'])
-        render json: { error: errorMessage }, status: :internal_server_error
+        json_error_response(errorMessage, :internal_server_error)
     end
 
     def relay_response(source_response)
