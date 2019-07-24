@@ -25,19 +25,23 @@ class ProxyController < ApplicationController
 
     def create
         begin       
-            user_request = UserRequest.create!(request_params)
-            if(is_request_permitted(user_request))
-                source_response = make_request(user_request)
-                relay_response(source_response)
+            user_request = UserRequest.new(request_params)
+            if(user_request.valid?)
+                if(is_request_permitted(user_request))
+                    source_response = make_request(user_request)
+                    relay_response(source_response)
+                else
+                    rate_limiter_response()
+                end
             else
-                rate_limiter_response()
+                validation_error = user_request.errors.full_messages.join(", ")
+                unprocessable_entity_response(validation_error)
             end
-        rescue ActiveRecord::RecordInvalid => e
-            unprocessable_entity_response(e)        
+                    
         rescue HTTP::TimeoutError => e
             request_timeout_response(e)        
         rescue StandardError => e
-            puts e
+            Rails.logger.debug 'Error: ' + e.to_s
             server_error_response()
         end
     end
