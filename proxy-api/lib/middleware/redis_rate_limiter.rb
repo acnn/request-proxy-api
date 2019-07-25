@@ -3,7 +3,7 @@ require 'redis'
 class RedisRateLimiter
     
     TRACKING_PERIOD_SECONDS = 60
-    TRACKING_PERIOD_REQUEST_LIMIT = 3
+    TRACKING_PERIOD_REQUEST_LIMIT = 50
 
     def initialize(app)
         @app = app
