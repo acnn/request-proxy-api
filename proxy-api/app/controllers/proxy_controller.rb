@@ -32,7 +32,7 @@ class ProxyController < ApplicationController
                 request_body: request_params[:request_body]
             )
             if(user_request.valid?)
-                source_response = make_request(user_request, { timeout_limit: 1 })
+                source_response = make_request(user_request, { timeout_limit: 5 })
                 relay_response(source_response)
             else
                 validation_error = user_request.errors.full_messages.join(", ")
