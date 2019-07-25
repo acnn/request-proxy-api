@@ -4,34 +4,70 @@ require 'helpers/webmock_helper'
 RSpec.describe 'Proxy API', type: :request do
 
     describe 'GET /proxy' do
-        before { get "/proxy" }
-    
-        it 'returns status code 405 Method Not Allowed' do
-          expect(response).to have_http_status(405)
+        context 'without client id' do
+            before { get "/proxy" }
+        
+            it 'returns status code 422 Unprocessable Entity' do
+            expect(response).to have_http_status(422)
+            end
+        end
+        context 'with client id' do
+            before { get "/proxy", params: { client_id: 'xyz' } }
+        
+            it 'returns status code 405 Method Not Allowed' do
+            expect(response).to have_http_status(405)
+            end
         end
     end
 
     describe 'GET /proxy/:id' do
-        before { get "/proxy/1" }
-    
-        it 'returns status code 405 Method Not Allowed' do
-          expect(response).to have_http_status(405)
+        context 'without client id' do
+            before { get "/proxy/1" }
+        
+            it 'returns status code 422 Unprocessable Entity' do
+            expect(response).to have_http_status(422)
+            end
+        end
+        context 'with client id' do
+            before { get "/proxy/1", params: { client_id: 'xyz' } }
+        
+            it 'returns status code 405 Method Not Allowed' do
+            expect(response).to have_http_status(405)
+            end
         end
     end
 
     describe 'PUT /proxy/:id' do
-        before { put "/proxy/1" }
-    
-        it 'returns status code 405 Method Not Allowed' do
-          expect(response).to have_http_status(405)
+        context 'without client id' do
+            before { put "/proxy/1" }
+        
+            it 'returns status code 422 Unprocessable Entity' do
+            expect(response).to have_http_status(422)
+            end
+        end
+        context 'with client id' do
+            before { put "/proxy/1", params: { client_id: 'xyz' } }
+        
+            it 'returns status code 405 Method Not Allowed' do
+            expect(response).to have_http_status(405)
+            end
         end
     end
 
     describe 'DELETE /proxy/:id' do
-        before { delete "/proxy/1" }
-    
-        it 'returns status code 405 Method Not Allowed' do
-          expect(response).to have_http_status(405)
+        context 'without client id' do
+            before { delete "/proxy/1" }
+        
+            it 'returns status code 422 Unprocessable Entity' do
+            expect(response).to have_http_status(422)
+            end
+        end
+        context 'with client id' do
+            before { delete "/proxy/1", params: { client_id: 'xyz' } }
+        
+            it 'returns status code 405 Method Not Allowed' do
+            expect(response).to have_http_status(405)
+            end
         end
     end
 
