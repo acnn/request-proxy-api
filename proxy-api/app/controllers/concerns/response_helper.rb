@@ -42,6 +42,10 @@ module ResponseHelper
         source_response.headers.each do |key, value|
             response.set_header(key, value)
         end
+        #remove the transfer encoding chunked header since we are sending the whole block instead of chunks
+        if(response.headers['Transfer-Encoding'] == 'chunked')
+            response.headers.delete('Transfer-Encoding')
+        end
         render body: source_response.body.to_s, status: source_response.status
     end
   end
