@@ -1,7 +1,6 @@
 class ProxyController < ApplicationController
     include RequestHelper
     include ResponseHelper
-    include RateLimiter
 
     def index
         method_not_allowed_response()
@@ -33,19 +32,16 @@ class ProxyController < ApplicationController
                 request_body: request_params[:request_body]
             )
             if(user_request.valid?)
-                if(is_request_permitted(user_request))
-                    source_response = make_request(user_request)
-                    relay_response(source_response)
-                else
-                    rate_limiter_response()
-                end
+                source_response = make_request(user_request, { timeout_limit: 1 })
+                relay_response(source_response)
             else
                 validation_error = user_request.errors.full_messages.join(", ")
                 unprocessable_entity_response(validation_error)
             end
                     
         rescue HTTP::TimeoutError => e
-            request_timeout_response(e)        
+            request_timeout_response(e)    
+
         rescue StandardError => e
             Rails.logger.debug 'Error: ' + e.to_s
             server_error_response()

@@ -5,7 +5,6 @@ module ResponseHelper
         'ALLOWED_METHODS' => 'POST',
         'TIMED_OUT' => 'The URL you are requesting did not respond in a timely fashion',
         'INVALID_PARAMS' => 'One or more request parameters are invalid',
-        'RATE_LIMIT' => 'You have exceeded the allowed number of requests per minute',
         'SERVER_ERROR' => 'An unexpected error occurred'
     }
 
@@ -32,11 +31,6 @@ module ResponseHelper
     #422 - input is semantically incorrect
     def unprocessable_entity_response(errorMessage = DEFAULT_MESSAGES['INVALID_PARAMS'])
         json_error_response(errorMessage, :unprocessable_entity)
-    end
-
-    #429 - rate limiter - too many requests
-    def rate_limiter_response(errorMessage = DEFAULT_MESSAGES['RATE_LIMIT'])
-        json_error_response(errorMessage, 429)
     end
 
     #500 - server error - any unhandler errors
